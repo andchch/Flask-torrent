@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Search Results</h1>
+    <ul>
+        {% for result in results %}
+            <li>
+                <img src="{{ result.image }}" alt="Book image" style="width: 50px; height: 75px;">
+                <strong>{{ result.title }}</strong> - {{ result.description }}
+                <form method="POST" action="{{ url_for('download') }}">
+                    <input type="hidden" name="title" value="{{ result.title }}">
+                    <input type="hidden" name="description" value="{{ result.description }}">
+                    <input type="hidden" name="link" value="{{ result.link }}">
+                    <input type="hidden" name="source_page" value="{{ result.source_page }}">
+                    <button type="submit">Download</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>

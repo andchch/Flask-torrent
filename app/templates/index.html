@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function checkStatus(bookId) {
+            $.get("/download_status/" + bookId, function(data) {
+                $("#status-" + bookId).text(data.status);
+                if (data.status.startsWith("Downloading")) {
+                    setTimeout(function() {
+                        checkStatus(bookId);
+                    }, 5000);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            {% for book in books %}
+                if ($("#status-{{ book.id }}").text().startsWith("Downloading")) {
+                    checkStatus({{ book.id }});
+                }
+            {% endfor %}
+        });
+    </script>
+</head>
+<body>
+<div class="container">
+    <h1>Welcome to the Library</h1>
+    <form method="POST" action="{{ url_for('search') }}">
+        {{ form.hidden_tag() }}
+        <label for="query">{{ form.query.label }}</label>
+        {{ form.query(size=32) }}
+        <label for="search_type">{{ form.search_type.label }}</label>
+        {{ form.search_type() }}
+        {{ form.submit() }}
+    </form>
+    <h2>Your Library</h2>
+    <ul>
+        {% for book in books %}
+            <li>
+                <img src="{{ book.image }}" alt="Book image" style="width: 50px; height: 75px;">
+                <strong>{{ book.title }}</strong> - {{ book.description }}
+                <span id="status-{{ book.id }}">{{ book.status }}</span>
+                {% if book.status == 'Completed' %}
+                        <a href="{{ url_for('download_file', book_id=book.id) }}">Download</a>
+                {% endif %}
+                <a href="{{ url_for('delete', book_id=book.id) }}">Delete</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{{ url_for('logout') }}">Logout</a>
+</div>
+</body>
+</html>
