@@ -5,12 +5,29 @@ from wtforms.validators import DataRequired
 
 
 class RegistrationForm(FlaskForm):
+    """
+        Form for user registration.
+
+        Attributes:
+            username (StringField): The username field, required.
+            password (StringField): The password field, required.
+            submit (SubmitField): The submit button.
+    """
     username = StringField('Username: ', validators=[DataRequired()])
     password = StringField('Password: ', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
 class LoginForm(FlaskForm):
+    """
+        Form for user login.
+
+        Attributes:
+            username (StringField): The username field, required.
+            password (StringField): The password field, required.
+            remember (BooleanField): The remember me checkbox.
+            submit (SubmitField): The submit button.
+    """
     username = StringField('Username: ', validators=[DataRequired()])
     password = StringField('Password: ', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
@@ -18,6 +35,17 @@ class LoginForm(FlaskForm):
 
 
 class SearchForm(FlaskForm):
+    """
+        Form for searching books.
+
+        Attributes:
+            query (StringField): The search query field, required.
+            search_type (SelectField): The search type dropdown with options for library and RuTracker.
+            submit (SubmitField): The submit button.
+    """
     query = StringField('Search: ', validators=[DataRequired()])
-    search_type = SelectField('Search Type: ', choices=[('library', 'Library'), ('rutracker', 'RuTracker')])
+    search_type = SelectField(
+        'Search Type: ',
+        choices=[('library', 'Library'), ('rutracker', 'RuTracker')],
+    )
     submit = SubmitField('Submit')

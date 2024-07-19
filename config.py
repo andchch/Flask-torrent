@@ -15,7 +15,6 @@ with open('jackett_data/Jackett/ServerConfig.json') as jackett_file:
     api_key = json.load(jackett_file).get('APIKey')
 
 JACKETT_API_KEY = api_key
-JACKETT_BASE_URL = os.getenv('JACKETT_BASE_URL')
 
 
 class DevelopmentConfig:
