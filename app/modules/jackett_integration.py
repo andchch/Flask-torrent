@@ -10,6 +10,15 @@ JACKETT_BASE_URL = 'http://127.0.0.1:9117/api/v2.0/indexers/rutracker/results/to
 
 
 def parse_jackett_response(response: Response) -> List[BookDTO]:
+    """
+            Parse the response from Jackett into a list of BookDTO objects.
+
+            Args:
+                response (Response): The HTTP response object from Jackett.
+
+            Returns:
+                List[BookDTO]: A list of BookDTO objects parsed from the response.
+    """
     results = []
     if response.status_code == 200:
         response_xml_doc = ET.fromstring(response.content)
@@ -27,6 +36,16 @@ def parse_jackett_response(response: Response) -> List[BookDTO]:
 
 
 def jackett_search(book_name: str, search_limit: int = 10) -> List[BookDTO]:
+    """
+        Perform a search for books using the Jackett API.
+
+        Args:
+            book_name (str): The name of the book to search for.
+            search_limit (int, optional): The maximum number of search results to return. Defaults to 10.
+
+        Returns:
+            List[BookDTO]: A list of BookDTO objects representing the search results.
+    """
     params = {
         'apikey': JACKETT_API_KEY,
         't': 'search',
