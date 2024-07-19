@@ -13,4 +13,6 @@ COPY . .
 ENV FLASK_APP=runner.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
+RUN flask db upgrade
+
 ENTRYPOINT ["flask", "run"]
