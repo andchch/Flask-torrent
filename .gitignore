@@ -162,5 +162,5 @@ cython_debug/
 .idea/
 
 transmission_data/
-jackett_data/Jackett/DataProtection/
 jackett_data/Jackett/log.txt
+app/files/

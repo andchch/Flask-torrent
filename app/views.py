@@ -1,7 +1,8 @@
 import os
 
-from flask import render_template, request, redirect, url_for, flash, jsonify, send_from_directory
+from flask import render_template, request, redirect, url_for, flash, send_from_directory
 from flask_login import login_required, login_user, logout_user, current_user
+from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 
 from app import app, db
@@ -67,7 +68,12 @@ def search():
     if form.validate_on_submit():
         book_name = form.query.data
         search_type = form.search_type.data
-        results = jackett_search(book_name) if search_type == 'rutracker' else []
+        if search_type == 'rutracker':
+            results = jackett_search(book_name)
+        else:
+            results = (Book.query.filter_by(user_id=current_user.id)
+                       .filter(or_(Book.title.ilike(f'%{book_name}%'),
+                                   Book.description.ilike(f'%{book_name}%'))).all())
     return render_template('search_results.html', form=form, results=results)
 
 

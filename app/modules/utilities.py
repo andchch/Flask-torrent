@@ -29,4 +29,4 @@ def move_file(path: str):
 
 
 def compress_folder(a: str):
-    shutil.make_archive(a + '.zip', 'zip', a)
+    shutil.make_archive(a, 'zip', a)
