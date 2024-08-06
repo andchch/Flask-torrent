@@ -14,6 +14,8 @@ services:
       - db
       - jackett
       - transmission
+    networks:
+      - appnetwork
 
   db:
     image: postgres:16-alpine
@@ -25,6 +27,8 @@ services:
       POSTGRES_DB: mydatabase
     ports:
       - "5432:5432"
+    networks:
+      - appnetwork
 
   jackett:
     image: lscr.io/linuxserver/jackett:latest
@@ -39,6 +43,9 @@ services:
     ports:
       - "9117:9117"
     restart: unless-stopped
+    networks:
+      - appnetwork
+
 
   transmission:
     image: lscr.io/linuxserver/transmission:latest
@@ -58,6 +65,8 @@ services:
       - "51413:51413"
       - "51413:51413/udp"
     restart: unless-stopped
+    networks:
+      - appnetwork
 
 
 volumes:
@@ -65,3 +74,7 @@ volumes:
   blackhole:
   watch_folder:
   transmisson_data:
+
+networks:
+  appnetwork:
+    driver: bridge

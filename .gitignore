@@ -164,3 +164,4 @@ cython_debug/
 transmission_data/
 jackett_data/Jackett/log.txt
 app/files/
+.venvwsl
