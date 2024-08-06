@@ -13,8 +13,8 @@
 # Установка и Запуск
 1. Склонируйте репозиторий
 ```bash
-git clone https://github.com/yourusername/yourrepository.git
-cd yourrepository
+git clone https://github.com/andchch/Flask-torrent.git
+cd Flask-torrent
 ```
 
 2. Запустите приложение
