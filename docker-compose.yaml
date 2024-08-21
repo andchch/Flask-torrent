@@ -7,9 +7,6 @@ services:
       - "5000:5000"
     volumes:
       - .:/app
-    environment:
-      FLASK_ENV: development
-    command: flask run --host=0.0.0.0
     depends_on:
       - db
       - jackett
@@ -46,9 +43,9 @@ services:
     networks:
       - appnetwork
 
-
   transmission:
     image: lscr.io/linuxserver/transmission:latest
+    hostname: transmission
     container_name: transmission
     environment:
       - PUID=1000
