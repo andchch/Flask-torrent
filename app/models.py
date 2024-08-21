@@ -97,6 +97,7 @@ class Book(db.Model):
     source_page = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), nullable=False)
     status = db.Column(db.String(255), nullable=False, default='Downloading')
+    filetype = db.Column(db.String(255), nullable=False)
 
 
 class BookDTO:
@@ -110,12 +111,13 @@ class BookDTO:
             source_page (str): The source page of the book.
             image (str): The URL of the book's image.
     """
-    def __init__(self, title: str, description: str, link: str, source_page: str):
+    def __init__(self, title: str, description: str, link: str, source_page: str, filetype: str):
         self.title = title
         self.description = description
         self.source_page = source_page
         self.image = self.get_image(source_page)
         self.link = link
+        self.filetype = filetype
 
     @staticmethod
     def get_image(page_url) -> str:
@@ -147,4 +149,4 @@ class BookDTO:
                 Book: The Book database model.
         """
         return Book(title=self.title, description=self.description, image=self.image, link=self.link,
-                    source_page=self.source_page)
+                    source_page=self.source_page, filetype=self.filetype)
