@@ -19,7 +19,7 @@ def check_download_statuses() -> None:
         if torrent.progress == 100.0:
             book.status = 'Completed'
         else:
-            book.status = f'Downloading ({torrent.progress}%)'
+            book.status = f'Downloading ({torrent.progress}%\nPeers: {torrent.peers_sending_to_us})'
         db.session.commit()
 
 
