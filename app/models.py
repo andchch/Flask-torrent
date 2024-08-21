@@ -25,13 +25,13 @@ def load_user(user_id: int):
 
 class User(db.Model, UserMixin):
     """
-        User model for storing user details.
+    Модель User.
 
-        Attributes:
-            id (int): The primary key of the user.
-            username (str): The username of the user.
-            pwd_hash (str): The hashed password of the user.
-            books (relationship): The relationship to the Book model.
+    Attributes:
+        id (int): The primary key of the user.
+        username (str): The username of the user.
+        pwd_hash (str): The hashed password of the user.
+        books (relationship): The relationship to the Book model.
     """
     __tablename__ = 'users'
 
@@ -43,49 +43,49 @@ class User(db.Model, UserMixin):
     @property
     def password(self):
         """
-            Prevent reading the password attribute.
+        Prevent reading the password attribute.
 
-            Raises:
-                AttributeError: When trying to read the password attribute.
+        Raises:
+            AttributeError: When trying to read the password attribute.
         """
         raise AttributeError('Password is not a readable attribute')
 
     @password.setter
     def password(self, password: str):
         """
-            Set the password, hashing it before storing.
+        Set the password, hashing it before storing.
 
-            Args:
-                password (str): The plaintext password.
+        Args:
+            password (str): The plaintext password.
         """
         self.pwd_hash = generate_password_hash(password)
 
     def verify_password(self, password: str) -> bool:
         """
-            Verify the password against the stored hash.
+        Verify the password against the stored hash.
 
-            Args:
-                password (str): The plaintext password.
+        Args:
+            password (str): The plaintext password.
 
-            Returns:
-                bool: True if the password matches the hash, False otherwise.
+        Returns:
+            bool: True if the password matches the hash, False otherwise.
         """
         return check_password_hash(self.pwd_hash, password)
 
 
 class Book(db.Model):
     """
-        Book model for storing book details.
+    Модель Book.
 
-        Attributes:
-            id (int): The primary key of the book.
-            title (str): The title of the book.
-            description (str): The description of the book.
-            image (str): The URL of the book's image.
-            link (str): The unique link to the book's torrent.
-            source_page (str): The source page of the book.
-            user_id (int): The ID of the user who added the book.
-            status (str): The download status of the book.
+    Attributes:
+        id (int): The primary key of the book.
+        title (str): The title of the book.
+        description (str): The description of the book.
+        image (str): The URL of the book's image.
+        link (str): The unique link to the book's torrent.
+        source_page (str): The source page of the book.
+        user_id (int): The ID of the user who added the book.
+        status (str): The download status of the book.
     """
     __tablename__ = 'books'
 
@@ -102,14 +102,14 @@ class Book(db.Model):
 
 class BookDTO:
     """
-        Data Transfer Object for transferring book data.
+    Модель BookDTO для передачи объекта
 
-        Attributes:
-            title (str): The title of the book.
-            description (str): The description of the book.
-            link (str): The unique link to the book's torrent.
-            source_page (str): The source page of the book.
-            image (str): The URL of the book's image.
+    Attributes:
+        title (str): The title of the book.
+        description (str): The description of the book.
+        link (str): The unique link to the book's torrent.
+        source_page (str): The source page of the book.
+        image (str): The URL of the book's image.
     """
     def __init__(self, title: str, description: str, link: str, source_page: str, filetype: str):
         self.title = title
@@ -122,13 +122,13 @@ class BookDTO:
     @staticmethod
     def get_image(page_url) -> str:
         """
-            Get the image URL from the source page.
+        Получение изображения книги по URL.
 
-            Args:
-                page_url (str): The URL of the source page.
+        Args:
+            page_url (str): URL страницы книги.
 
-            Returns:
-                str: The URL of the image.
+        Returns:
+            str: URL изображения.
         """
         try:
             response = requests.get(page_url)
@@ -143,10 +143,10 @@ class BookDTO:
 
     def to_db_model(self) -> Book:
         """
-            Convert the BookDTO to a Book database model.
+        Преобразование BookDTO в Book..
 
-            Returns:
-                Book: The Book database model.
+        Returns:
+            Book: Модель Book.
         """
         return Book(title=self.title, description=self.description, image=self.image, link=self.link,
                     source_page=self.source_page, filetype=self.filetype)

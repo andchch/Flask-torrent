@@ -6,12 +6,12 @@ from wtforms.validators import DataRequired
 
 class RegistrationForm(FlaskForm):
     """
-        Form for user registration.
+    Форма регистрации пользователя
 
-        Attributes:
-            username (StringField): The username field, required.
-            password (StringField): The password field, required.
-            submit (SubmitField): The submit button.
+    Attributes:
+        username (StringField): The username field, required.
+        password (StringField): The password field, required.
+        submit (SubmitField): The submit button.
     """
     username = StringField('Username: ', validators=[DataRequired()])
     password = StringField('Password: ', validators=[DataRequired()])
@@ -20,13 +20,13 @@ class RegistrationForm(FlaskForm):
 
 class LoginForm(FlaskForm):
     """
-        Form for user login.
+    Форма авторизации пользователя
 
-        Attributes:
-            username (StringField): The username field, required.
-            password (StringField): The password field, required.
-            remember (BooleanField): The remember me checkbox.
-            submit (SubmitField): The submit button.
+    Attributes:
+        username (StringField): The username field, required.
+        password (StringField): The password field, required.
+        remember (BooleanField): The remember me checkbox.
+        submit (SubmitField): The submit button.
     """
     username = StringField('Username: ', validators=[DataRequired()])
     password = StringField('Password: ', validators=[DataRequired()])
@@ -36,12 +36,12 @@ class LoginForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     """
-        Form for searching books.
+    Форма для поиска книг
 
-        Attributes:
-            query (StringField): The search query field, required.
-            search_type (SelectField): The search type dropdown with options for library and RuTracker.
-            submit (SubmitField): The submit button.
+    Attributes:
+        query (StringField): The search query field, required.
+        search_type (SelectField): The search type dropdown with options for library and RuTracker.
+        submit (SubmitField): The submit button.
     """
     query = StringField('Search: ', validators=[DataRequired()])
     search_type = SelectField('Search Type: ', choices=[('library', 'Library'), ('rutracker', 'RuTracker')])

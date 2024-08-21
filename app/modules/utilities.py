@@ -7,10 +7,10 @@ from app.modules.transmission_integration import transmission_client
 
 def check_download_statuses() -> None:
     """
-        Check the download statuses of books marked as downloading and update their statuses.
+    Проверка и обновление статуса загрузки книг.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     print('Checking download statuses')
     books = Book.query.filter(Book.status.like('Downloading%')).all()
@@ -25,13 +25,13 @@ def check_download_statuses() -> None:
 
 def get_filename(book_id: int) -> str:
     """
-        Get the filename of the torrent associated with a book by its ID.
+    Получение имени файла по ID книги.
 
-        Args:
-            book_id (int): The ID of the book.
+    Args:
+        book_id (int): ID книги.
 
-        Returns:
-            str: The filename of the torrent.
+    Returns:
+        str: Имя файла торрента.
     """
     book = Book.query.filter_by(id=book_id).first()
     torrent = transmission_client.get_torrent(book.id)
@@ -41,25 +41,25 @@ def get_filename(book_id: int) -> str:
 
 def move_file(path: str) -> None:
     """
-        Move a file to the 'app/files' directory.
+    Перемещение файла в 'app/files'.
 
-        Args:
-            path (str): The path to the file to be moved.
+    Args:
+        path (str): Путь к файлу для перемещения.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     shutil.move(path, 'app/files')
 
 
 def compress_folder(a: str) -> None:
     """
-        Compress a folder into a zip archive.
+    Сжатие папки в архив.
 
-        Args:
-            a (str): The path to the folder to be compressed.
+    Args:
+        a (str): Путь к папке.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     shutil.make_archive(a, 'zip', a)

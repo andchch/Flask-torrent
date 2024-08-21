@@ -12,13 +12,13 @@ transmission_client = transmission_rpc.Client(
 
 def add_torrent(link: str) -> None:
     """
-        Add a torrent to the Transmission client using a URL.
+    Добавление торрента в Transmission исползуя URL.
 
-        Args:
-            link (str): The URL link to the torrent file.
+    Args:
+        link (str): URL торрент файла.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     resp = requests.get(link)
     content = resp.content
@@ -27,13 +27,13 @@ def add_torrent(link: str) -> None:
 
 def del_torrent(book_id: int) -> None:
     """
-        Delete a torrent from the Transmission client by its ID.
+    Удаление торрента из Transmission по ID.
 
-        Args:
-            book_id (int): The ID of the torrent to delete.
+    Args:
+        book_id (int): ID торрента для удаления.
 
-        Returns:
-            None
+    Returns:
+        None
     """
     torrent = transmission_client.get_torrent(book_id)
     transmission_client.remove_torrent(torrent.id, delete_data=True)

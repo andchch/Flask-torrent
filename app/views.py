@@ -17,10 +17,7 @@ from .modules.utilities import check_download_statuses, get_filename, compress_f
 @login_required
 def home():
     """
-        Home route to display the user's books and the search form.
-
-        Returns:
-            Response: The rendered template for the home page.
+    Главный путь для отображения библиотеки ползователя
     """
     check_download_statuses()
     form = SearchForm()
@@ -31,14 +28,14 @@ def home():
 @app.route('/registration', methods=['GET', 'POST'])
 def registration():
     """
-        Registration route for new users.
+    Registration route for new users.
 
-        Methods:
-            GET: Render the registration form.
-            POST: Process the registration form submission.
+    Methods:
+        GET: Render the registration form.
+        POST: Process the registration form submission.
 
-        Returns:
-            Response: The rendered template for the registration page or redirect to login.
+    Returns:
+        Response: The rendered template for the registration page or redirect to login.
     """
     form = RegistrationForm()
     if form.validate_on_submit():
@@ -54,14 +51,14 @@ def registration():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     """
-        Login route for existing users.
+    Login route for existing users.
 
-        Methods:
-            GET: Render the login form.
-            POST: Process the login form submission.
+    Methods:
+        GET: Render the login form.
+        POST: Process the login form submission.
 
-        Returns:
-            Response: The rendered template for the login page or redirect to home.
+    Returns:
+        Response: The rendered template for the login page or redirect to home.
     """
     if current_user.is_authenticated:
         print('User is already authenticated')
@@ -82,10 +79,10 @@ def login():
 @login_required
 def logout():
     """
-        Logout route to log out the current user.
+    Logout route to log out the current user.
 
-        Returns:
-            Response: Redirect to the login page.
+    Returns:
+        Response: Redirect to the login page.
     """
     logout_user()
     flash('You have been logged out.', 'success')
@@ -96,13 +93,10 @@ def logout():
 @login_required
 def search():
     """
-        Search route to search for books.
+    Страница поиска книг.
 
-        Methods:
-            POST: Process the search form submission.
-
-        Returns:
-            Response: The rendered template for the search results page.
+    Methods:
+        POST: Поиск книг.
     """
     form = SearchForm()
     results = []
@@ -122,13 +116,10 @@ def search():
 @login_required
 def download():
     """
-        Download route to add a book to the user's library and download the torrent.
+    Путь добавления книги в библиотеку пользователя и загрузки торрента.
 
-        Methods:
-            POST: Process the download form submission.
-
-        Returns:
-            Response: Redirect to the home page.
+    Methods:
+        POST: Начало загрузки и добавления книги в библиотеку.
     """
     title = request.form.get('title')
     description = request.form.get('description')
@@ -154,16 +145,13 @@ def download():
 @login_required
 def download_file(book_id):
     """
-        Route to download a file associated with a book.
+    Скачивание файла книги.
 
-        Args:
-            book_id (int): The ID of the book.
+    Args:
+        book_id (int): ID книги.
 
-        Methods:
-            GET: Process the file download request.
-
-        Returns:
-            Response: The file download or redirect to the home page.
+    Methods:
+        GET: Скачивание.
     """
     filename = get_filename(book_id)
     if os.path.exists(os.path.join('app', 'files', filename)):
@@ -187,16 +175,13 @@ def download_file(book_id):
 @login_required
 def delete(book_id):
     """
-        Route to delete a book from the user's library and remove the associated torrent.
+    Удаление книги из библиотеки пользователя и торрента.
 
-        Args:
-            book_id (int): The ID of the book to delete.
+    Args:
+        book_id (int): ID книги для удаления.
 
-        Methods:
-            GET: Process the delete request.
-
-        Returns:
-            Response: Redirect to the home page.
+    Methods:
+        GET: Удаление.
     """
     book = Book.query.filter_by(id=book_id, user_id=current_user.id).first()
     db.session.delete(book)
