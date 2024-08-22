@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 from flask_login import UserMixin
+from sqlalchemy import Boolean
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, login_manager
@@ -39,6 +40,8 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(255), nullable=False)
     pwd_hash = db.Column(db.String(255), nullable=False)
     books = db.relationship('Book', backref='user', lazy=True)
+    torrent_username = db.Column(db.String(255), nullable=True)
+    torrent_password = db.Column(db.String(255), nullable=True)
 
     @property
     def password(self):
@@ -93,11 +96,32 @@ class Book(db.Model):
     title = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text(), nullable=False)
     image = db.Column(db.String(255), nullable=False)
-    link = db.Column(db.String(1024), nullable=False, unique=True)
+    link = db.Column(db.String(2048), nullable=False, unique=True)
     source_page = db.Column(db.String(255), nullable=False)
     user_id = db.Column(db.Integer(), db.ForeignKey('users.id'), nullable=False)
     status = db.Column(db.String(255), nullable=False, default='Downloading')
     filetype = db.Column(db.String(255), nullable=False)
+    parsed = db.Column(Boolean, default=False, nullable=False)
+    is_folder = db.Column(Boolean, default=False, nullable=False)
+    filepath = db.Column(db.String(255), nullable=False)
+
+    def rename(self, new_title: str):
+        self.title = new_title
+        db.session.commit()
+
+
+class Chapter(db.Model):
+    """
+    Docstring
+    """
+    __tablename__ = 'chapters'
+
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String(255), nullable=False)
+    # filetype = db.Column(db.String(255), nullable=False)
+    filename = db.Column(db.String(255), nullable=False)
+    book_id = db.Column(db.Integer(), db.ForeignKey('books.id'), nullable=False)
+    book = db.relationship('Book', backref=db.backref('chapters', lazy=True))
 
 
 class BookDTO:

@@ -1,13 +1,13 @@
 import os
 
-from flask import render_template, request, redirect, url_for, flash, send_from_directory
+from flask import render_template, request, redirect, url_for, flash, send_from_directory, abort
 from flask_login import login_required, login_user, logout_user, current_user
 from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError
 
 from app import app, db
 from .forms import LoginForm, SearchForm, RegistrationForm
-from .models import Book, User, BookDTO
+from .models import Book, User, BookDTO, Chapter
 from .modules.jackett_integration import jackett_search
 from .modules.transmission_integration import add_torrent, del_torrent
 from .modules.utilities import check_download_statuses, get_filename, compress_folder, move_file
@@ -125,8 +125,9 @@ def download():
     description = request.form.get('description')
     link = request.form.get('link')
     source_page = request.form.get('source_page')
+    filetype = request.form.get('filetype')
 
-    book = BookDTO(title=title, description=description, link=link, source_page=source_page)
+    book = BookDTO(title=title, description=description, link=link, source_page=source_page, filetype=filetype)
     db_book = book.to_db_model()
     db_book.user_id = current_user.id
     add_torrent(link)
@@ -188,3 +189,24 @@ def delete(book_id):
     db.session.commit()
     del_torrent(book_id)
     return redirect(url_for('home'))
+
+
+@app.route('/rename/<int:book_id>', methods=['POST'])
+def rename_book(book_id):
+    book = Book.query.filter_by(id=book_id, user_id=current_user.id).first_or_404()
+    new_title = request.form['new_title']
+    if new_title:
+        book.rename(new_title)
+        flash('Book renamed successfully!', 'success')
+    else:
+        flash('New title cannot be empty.', 'danger')
+    return redirect(url_for('home'))
+
+
+@app.route('/audiobook/<int:chapter_id>')
+def play_audiobook(chapter_id):
+    book_id = request.args.get('book_id')
+
+    chapter = Chapter.query.get_or_404(chapter_id)
+    book = Book.query.get_or_404(book_id)
+    return send_from_directory(f'../downloads/complete/{book.filepath}', chapter.filename, as_attachment=False)

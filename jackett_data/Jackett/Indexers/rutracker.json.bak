@@ -45,7 +45,7 @@
     "id": "password",
     "type": "inputstring",
     "name": "Password",
-    "value": "CfDJ8KciH1Lhe1BGvlqKcMgYM7OpfI4ddNDnBhSL7bnS9nqbrLOWzPd1Gpz_acQUnbtQFKPG5A5GBq03f5j9SZC3eKeTZQnm_2Lo-0qCKG5NEeGzZc5LtcR-8xP8tcG3t-ox_0C9mAldxIbYv2MaGhUgT0U"
+    "value": "CfDJ8KciH1Lhe1BGvlqKcMgYM7OtiyYyk0RTu_LnkCzBjDUwEBFVrQOmpR2aOtEBwzkVdeqw-SId9YQJf515PnsH9H1hAE-v7kzBdZID1m64CzTbB1UDXm9804sqAtvkBtvbiRfmpwB1gWVzMufvWW8vdpE"
   },
   {
     "id": "captchatext",
@@ -63,7 +63,7 @@
     "id": "cookieheader",
     "type": "hiddendata",
     "name": "CookieHeader",
-    "value": "bb_ssl=1; bb_session=0-32718595-OAQnNjSkdRBM1frjtDt2"
+    "value": ""
   },
   {
     "id": "lasterror",

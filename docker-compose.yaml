@@ -2,7 +2,8 @@ version: '3.9'
 
 services:
   web:
-    build: .
+    build:
+      dockerfile: Dockerfile
     ports:
       - "5000:5000"
     volumes:
@@ -35,7 +36,7 @@ services:
       - PGID=1000
       - TZ=Europe/Moscow
     volumes:
-      - ./jackett_data:/config
+      - ./jackett_data:/config  #  Логин и пароль вроде можно в открытом виде вставить в файл индексера
       - blackhole:/downloads
     ports:
       - "9117:9117"
@@ -64,7 +65,6 @@ services:
     restart: unless-stopped
     networks:
       - appnetwork
-
 
 volumes:
   postgres_data:

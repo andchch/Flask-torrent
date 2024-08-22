@@ -1,7 +1,8 @@
+import os
 import shutil
 
 from app import db
-from app.models import Book
+from app.models import Book, Chapter
 from app.modules.transmission_integration import transmission_client
 
 
@@ -13,13 +14,29 @@ def check_download_statuses() -> None:
         None
     """
     print('Checking download statuses')
-    books = Book.query.filter(Book.status.like('Downloading%')).all()
-    for book in books:
+    down_books = Book.query.filter(Book.status.like('Downloading%')).all()
+    comp_books = Book.query.filter_by(status='Completed', parsed=False).all()
+    for book in down_books:
         torrent = transmission_client.get_torrent(book.id)
         if torrent.progress == 100.0:
             book.status = 'Completed'
+            filepath = os.path.join('downloads', 'complete', torrent.name)
+            if os.path.isfile(filepath):
+                book.is_folder = False
+            else:
+                book.is_folder = True
         else:
-            book.status = f'Downloading ({torrent.progress}%\nPeers: {torrent.peers_sending_to_us})'
+            book.status = f'Downloading ({torrent.progress})'
+        db.session.commit()
+    for book in comp_books:
+        torrent = transmission_client.get_torrent(book.id)
+        book_dir = torrent.name
+        chapters = sorted(os.listdir(os.path.join('downloads', 'complete', book_dir)))
+
+        for chapter in chapters:
+            db_chapter = Chapter(title=chapter[:chapter.rindex('.')], filename=chapter, book_id=book.id)
+            db.session.add(db_chapter)
+        book.parsed = True
         db.session.commit()
 
 

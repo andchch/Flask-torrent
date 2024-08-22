@@ -45,14 +45,42 @@
                 <img src="{{ book.image }}" alt="Book image" style="width: 50px; height: 75px;">
                 <strong>{{ book.title }}</strong> - {{ book.description }}
                 <span id="status-{{ book.id }}">{{ book.status }}</span>
+
+                <form method="POST" action="{{ url_for('rename_book', book_id=book.id) }}">
+                    <input type="text" name="new_title" placeholder="New Title" required>
+                    <button type="submit">Rename</button>
+                </form>
+
                 {% if book.status == 'Completed' %}
+                    {% if book.is_folder and book.filetype == 'Audiobook' %}
+                        <ul>
+                            {% for chapter in book.chapters %}
+                                <li>{{ chapter.title }}</li>
+                                <li><audio controls>
+                                        <source src="{{ url_for('play_audiobook', book_id=book.id, chapter_id=chapter.id) }}" type="audio/mpeg">
+                                        Your browser does not support the audio element.
+                                </audio></li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
                         <a href="{{ url_for('download_file', book_id=book.id) }}">Download</a>
+                    {% endif %}
                 {% endif %}
+
                 <a href="{{ url_for('delete', book_id=book.id) }}">Delete</a>
             </li>
         {% endfor %}
     </ul>
     <a href="{{ url_for('logout') }}">Logout</a>
 </div>
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <ul class="flashes">
+      {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
 </body>
 </html>

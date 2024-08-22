@@ -1,8 +1,7 @@
 docs/
 .venv/
+.venvwsl
 downloads/
 .gitignore
-.pre-commit-config.yaml
 docker-compose.yaml
 Dockerfile
-pyproject.toml

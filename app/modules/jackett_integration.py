@@ -41,7 +41,7 @@ def parse_jackett_response(response: Response) -> List[BookDTO]:
     return results
 
 
-def jackett_search(book_name: str, search_limit: int = 10) -> List[BookDTO]:
+def jackett_search(book_name: str, search_limit: int = 20) -> List[BookDTO]:
     """
     Поиск книг используя Jackett API
     Args:
