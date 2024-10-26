@@ -25,5 +25,5 @@ SQLAlchemy==2.0.31
 transmission-rpc==7.0.10
 typing_extensions==4.12.2
 urllib3==2.2.2
-Werkzeug==3.0.3
+Werkzeug==3.0.6
 WTForms==3.1.2
